@@ -10,8 +10,8 @@ app.get('/departments/:dept/courses', (req, res) => {
     const { dept } = req.params;
     const { level, minCredits, maxCredits, semester, instructor } = req.query;
     // Implementing the filter logic
-    
     // Hint: Use the filter method to filter the courses array based on the provided criteria
+    courses.filter();
 });
 
 app.listen(PORT, () => {
