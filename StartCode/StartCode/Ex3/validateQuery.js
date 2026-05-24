@@ -1,16 +1,31 @@
-const express = require('express');
-const app = express();
-const port = 8000;
+// validateQuery.js
+const validateQuery = (req, res, next) => {
+    const { minCredits, maxCredits } = req.query;
 
+    if (minCredits !== undefined) {
+        const min = Number(minCredits);
+        if (!Number.isInteger(min) || isNaN(min)) {
+            return res.status(400).json({ error: "Bad Request", message: "minCredits must be an integer." });
+        }
+    }
 
-function validating(req, res, next){
-    const {minCredits, maxCredits} = req.query;
-if(minCredits !== undefined &&  maxCredits != undefined){
-    console.log("Valid!");
-}
-if(minCredits > maxCredits){
-    return res.status(400).json({error: "404 error!"})
-}
-next();
-}
-module.exports = validating;
+    if (maxCredits !== undefined) {
+        const max = Number(maxCredits);
+        if (!Number.isInteger(max) || isNaN(max)) {
+            return res.status(400).json({ error: "Bad Request", message: "maxCredits must be an integer." });
+        }
+    }
+
+    if (minCredits !== undefined && maxCredits !== undefined) {
+        if (Number(minCredits) > Number(maxCredits)) {
+            return res.status(400).json({ 
+                error: "Bad Request", 
+                message: "minCredits cannot be greater than maxCredits." 
+            });
+        }
+    }
+
+    next();
+};
+
+module.exports = validateQuery;
